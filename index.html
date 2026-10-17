@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safwan | Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .hero img {
+      width: 350px;
+      height: 450px;
+      object-fit: cover;
+      border-radius: 8px;
+      filter: grayscale(100%);
+    }
+
+    .hero-text { max-width: 450px; }
+
+    .hero-text h1 { font-size: 48px; margin-bottom: 10px; }
+    .hero-text h2 { font-size: 20px; margin-bottom: 20px; }
+
+    .hero-text p {
+      color: #aaa;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #ef4a4a;
+      color: #fff;
+      padding: 14px 30px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      transition: transform 0.3s ease;
+    }
+
+    .navbar.hide {
+      transform: translateY(-100%);
+    }
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .navbar a:hover { color: #ef4a4a; }
+
+    .nav-links, .nav-social {
+      display: flex;
+      gap: 25px;
+      flex: 1;
+    }
+
+    .nav-social { justify-content: flex-end; }
+
+    html { scroll-behavior: smooth; }
+
+    .about {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      text-align: center;
+    }
+
+    .about h2 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .about .line {
+      width: 60px;
+      height: 4px;
+      background: #ef4a4a;
+      margin: 0 auto 30px;
+    }
+
+    .about p {
+      color: #aaa;
+      line-height: 1.8;
+      font-size: 17px;
+    }
+        .skills {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      text-align: center;
+    }
+
+    .skills h2 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .skills .line {
+      width: 60px;
+      height: 4px;
+      background: #ef4a4a;
+      margin: 0 auto 50px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .skill-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 40px 25px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-8px);
+      border-color: #ef4a4a;
+    }
+
+    .skill-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .skill-card p {
+      color: #aaa;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+        .portfolio {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      text-align: center;
+    }
+
+    .portfolio h2 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .portfolio .line {
+      width: 60px;
+      height: 4px;
+      background: #ef4a4a;
+      margin: 0 auto 50px;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .work-item {
+      position: relative;
+      height: 300px;
+      background-color: #111;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .work-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .work-item:hover .work-overlay { opacity: 1; }
+
+    .work-overlay h3 { font-size: 20px; margin-bottom: 8px; }
+    .work-overlay span { color: #ef4a4a; font-size: 14px; }
+        .work-item { cursor: pointer; }
+
+    .play-icon {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      width: 40px;
+      height: 40px;
+      background: #ef4a4a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-content img,
+    .lightbox-content video {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 8px;
+    }
+
+    .lightbox-content iframe {
+      width: 80vw;
+      max-width: 1000px;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .lightbox-close:hover { color: #ef4a4a; }
+        .work-subtitle {
+      font-size: 24px;
+      text-align: left;
+      margin: 0 0 25px;
+      padding-left: 15px;
+      border-left: 4px solid #ef4a4a;
+    }
+
+    .work-subtitle.second { margin-top: 80px; }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .video-grid .work-item {
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+        .contact {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      text-align: center;
+    }
+
+    .contact h2 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .contact .line {
+      width: 60px;
+      height: 4px;
+      background: #ef4a4a;
+      margin: 0 auto 30px;
+    }
+
+    .contact p {
+      color: #aaa;
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+
+    .contact-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .contact-btn {
+      padding: 14px 30px;
+      border: 1px solid #333;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .contact-btn:hover {
+      background: #ef4a4a;
+      border-color: #ef4a4a;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      font-size: 14px;
+      border-top: 1px solid #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#portfolio">Portfolio</a>
+    </div>
+        <div class="nav-social">
+      <a href="https://facebook.com/safwancowdhury6890" target="_blank">Facebook</a>
+      <a href="https://www.instagram.com/safwan.nxt/?__pwa=1" target="_blank">Instagram</a>
+      <a href="mailto:safwanchodhury245@gmail.com" target="_blank">Email</a>
+    </div>
+  </nav>
+  <section class="hero" id="home">
+    <img src="profile.jpg" alt="Safwan">
+    <div class="hero-text">
+      <h1>I'm Safwan Chowdhury</h1>
+      <h2>Visual Designer & Motion Artist.</h2>
+      <a href="#contact" class="btn">Get in touch</a>
+    </div>
+  </section>
+  <section class="about" id="about">
+    <h2>About Me</h2>
+    <div class="line"></div>
+    <p>
+      Hi, I'm Safwan Chowdhury — a passionate Graphic Designer, Video Editor, and Visual Creator.
+
+      I specialize in creating visually engaging designs, compelling video content, and creative visual experiences that bring ideas to life. With a strong interest in design and motion, I enjoy combining creativity and technical skills to produce work that is both meaningful and visually appealing.
+
+      My creative toolkit includes Adobe Photoshop, Adobe Illustrator, Adobe Premiere Pro, and Adobe After Effects. From branding and graphic design to video editing and motion graphics, I focus on delivering clean, thoughtful, and impactful results.
+
+      I believe great design is more than just appearance — it's about telling a story, communicating an idea, and creating a lasting impression.
+ 
+      Let's turn your ideas into something extraordinary.
+    </p>
+  </section>
+    <section class="skills" id="skills">
+    <h2>My Skills</h2>
+    <div class="line"></div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h3>Graphic Design</h3>
+        <p>Poster, social media post and promotional design.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Video Editing</h3>
+        <p>Premiere Pro & After Effects video edit.</p>
+      </div>
+      <div class="skill-card">
+        <h3>Branding</h3>
+        <p>Logo & brand identity design.</p>
+      </div>
+    </div>
+  </section>
+        <section class="portfolio" id="portfolio">
+    <h2>My Work</h2>
+    <div class="line"></div>
+
+    <!-- DESIGN GRID -->
+    <h3 class="work-subtitle">Graphic Design</h3>
+    <div class="work-grid">
+      <div class="work-item" data-type="image" data-src="work1.jpg" style="background-image: url('work1.jpg');">
+        <div class="work-overlay"><h3>Project One</h3><span>Poster Design</span></div>
+      </div>
+      <div class="work-item" data-type="image" data-src="work2.jpg" style="background-image: url('work2.jpg');">
+        <div class="work-overlay"><h3>Project Two</h3><span>Logo Design</span></div>
+      </div>
+      <div class="work-item" data-type="image" data-src="work3.jpg" style="background-image: url('work3.jpg');">
+        <div class="work-overlay"><h3>Project Three</h3><span>Branding</span></div>
+      </div>
+      <div class="work-item" data-type="image" data-src="work4.jpg" style="background-image: url('work4.jpg');">
+        <div class="work-overlay"><h3>Project Three</h3><span>Branding</span></div>
+      </div>
+      <div class="work-item" data-type="image" data-src="work5.jpg" style="background-image: url('work5.jpg');">
+        <div class="work-overlay"><h3>Project Three</h3><span>Branding</span></div>
+      </div>
+    </div>
+
+    <!-- VIDEO GRID (16:9) -->
+    <h3 class="work-subtitle second">Video Editing</h3>
+    <div class="video-grid">
+      <div class="work-item" data-type="video" data-src="video1.mp4" style="background-image: url('video1-thumb.jpg');">
+        <div class="play-icon">▶</div>
+        <div class="work-overlay"><h3>2 cents podcast</h3><span>reel Editing</span></div>
+      </div>
+      <div class="work-item" data-type="video" data-src="video2.mp4" style="background-image: url('video2-thumb.jpg');">
+        <div class="play-icon">▶</div>
+        <div class="work-overlay"><h3>Documentary editing</h3><span>reel Editing</span></div>
+      </div>
+      <div class="work-item" data-type="video" data-src="video3.mp4" style="background-image: url('video3-thumb.jpg');">
+        <div class="play-icon">▶</div>
+        <div class="work-overlay"><h3>My editing</h3><span>reel Editing</span></div>
+      </div>
+    </div>
+    <!-- PHOTO GRID -->
+    <h3 class="work-subtitle">Photography</h3>
+    <div class="work-grid">
+      <div class="work-item" data-type="image" data-src="photography1.jpg" style="background-image: url('photography1.jpg');">
+        <div class="work-overlay"><h3>River & Hill</h3><span>Sylhet</span></div>
+      </div>
+      <div class="work-item" data-type="image" data-src="photography2.jpg" style="background-image: url('photography2.jpg');">
+        <div class="work-overlay"><h3>Flower</h3><span></span></div>
+      </div>
+      <div class="work-item" data-type="image" data-src="photography3.jpg" style="background-image: url('photography3.jpg');">
+        <div class="work-overlay"><h3>Thunderstrom</h3><span></span></div>
+      </div>
+      <div class="work-item" data-type="image" data-src="photography4.jpg" style="background-image: url('photography4.jpg');">
+        <div class="work-overlay"><h3>moon</h3><span></span></div>
+      </div>
+    </div>
+
+  </section>
+    <section class="contact" id="contact">
+    <h2>Get In Touch</h2>
+    <div class="line"></div>
+    <p>Kono kaj er jonno ba shudhu kotha bolar jonno, nicher jekono maddhome jogajog koro.</p>
+    <div class="contact-buttons">
+      <a href="mailto:safwanchodhury245@gmail.com" class="contact-btn">Email</a>
+      <a href="https://wa.me/8801790556782" target="_blank" class="contact-btn">WhatsApp</a>
+      <a href="https://www.facebook.com/safwancowdhury6890" target="_blank" class="contact-btn">Facebook</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    © 2026 Safwan. All rights reserved.
+  </footer>
+
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <div class="lightbox-content" id="lightbox-content"></div>
+  </div>
+  </section>
+    <script>
+    let lastScroll = 0;
+    const navbar = document.querySelector('.navbar');
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+
+      if (currentScroll > lastScroll && currentScroll > 100) {
+        navbar.classList.add('hide');      // niche scroll = lukao
+      } else {
+        navbar.classList.remove('hide');   // upore scroll = dekhao
+      }
+
+      lastScroll = currentScroll;
+    });
+        const lightbox = document.getElementById('lightbox');
+    const box = document.getElementById('lightbox-content');
+
+    document.querySelectorAll('.work-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const type = item.dataset.type;
+        const src = item.dataset.src;
+
+        if (type === 'image') {
+          box.innerHTML = `<img src="${src}" alt="">`;
+        } else if (type === 'video') {
+          box.innerHTML = `<video src="${src}" controls autoplay></video>`;
+        } else if (type === 'youtube') {
+          box.innerHTML = `<iframe src="https://www.youtube.com/embed/${src}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+        }
+        lightbox.classList.add('open');
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      box.innerHTML = '';   // video bondho hoye jabe
+    }
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+</body>
+</html>
